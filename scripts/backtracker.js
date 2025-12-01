@@ -3,17 +3,30 @@ var boardNumber = 8;
 
 var board_history = []
 
-var avaliableQueens = []
+var availableQueens = []
 var rowAttempts = []
 
+var solutionNumbers = []
+
+//
+// Create an array of Queens
+// This list is used later to 'pick' from
+// as we place queens on the board.
+//
 for (var i = 1; i <= boardNumber; i++)
 {
-    avaliableQueens.push(i)
+    availableQueens.push(i)
     rowAttempts.push([])
 }
 
 var solutionCount = 0;
 
+//
+// Check a partial or full solution - the check is split
+// into two parts; the first part checks that no two queens
+// are in the same column.  The second part checks for any
+// diagonal attacks.
+//
 function check(checkBoard)
 {
     function columnChecker(board)
@@ -53,9 +66,11 @@ function check(checkBoard)
 
 function queenPlacer()
 {
-    for (var i = 0; i < avaliableQueens.length; i++)
+    availableQueens.sort()
+    //console.log("queenPlacer, availableQueens: ", availableQueens)
+    for (var i = 0; i < availableQueens.length; i++)
     {
-        const queen = avaliableQueens[i]
+        const queen = availableQueens[i]
 
         if (rowAttempts[board.length].includes(queen)) {continue;}
 
@@ -68,11 +83,13 @@ function queenPlacer()
 
         if (valid)
         {
-            avaliableQueens.splice(i, 1)
+            availableQueens.splice(i, 1)
+            //console.log("queenPlacer, valid: ", board)
             return true;
         }
         else
         {
+            //console.log("queenPlacer, invalid: ", board)
             board.pop()
         }
     }
@@ -83,6 +100,8 @@ function backtrack()
 {
     var isBacktrack = true;
 
+    //console.log("Backtracking")
+    
     while (isBacktrack && board.length > 0)
     {
         if (board.length < boardNumber)
@@ -90,10 +109,10 @@ function backtrack()
             rowAttempts[board.length] = []
         }
 
-        avaliableQueens.push(board.pop())
-        board_history.push([...board])
+        availableQueens.push(board.pop())
+        //board_history.push([...board])
 
-        for (queen of avaliableQueens)
+        for (queen of availableQueens)
         {
             if (!(rowAttempts[board.length].includes(queen)))
             {
@@ -123,7 +142,8 @@ function run()
         else if (hasPlaced && (board.length == boardNumber))
         {
             solutionCount++;
-            console.log(board)
+            solutionNumbers.push(board_history.length)
+            // console.log(board)
             running = backtrack()
         }
         else if (!hasPlaced)
@@ -131,8 +151,6 @@ function run()
             running = backtrack()
         }
     }
-    console.log(board_history)
-    return board_history
+    //console.log(board_history)
+    return [board_history, solutionNumbers]
 }
-
-run()

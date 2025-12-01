@@ -1,4 +1,4 @@
-var board = [8, 2, 5, 3, 1, 7, 4, 6]
+//var board = [8, 2, 5, 3, 1, 7, 4, 6]
 
 function columnChecker(board)
 {
@@ -30,4 +30,4 @@ function grandChecker(board)
     return false
 }
 
-console.log(grandChecker(board))
+//console.log(grandChecker(board))
